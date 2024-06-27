@@ -7,4 +7,6 @@ export const configSchema = Joi.object({
   db_host: Joi.string().required(),
   db_user: Joi.string().required(),
   db_name: Joi.string().required(),
+  jwt_secret: Joi.string().required(),
+  jwt_expiration: Joi.string().required(),
 });
