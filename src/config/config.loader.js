@@ -23,6 +23,8 @@ export class ConfigService {
       db_host: process.env.DB_HOST,
       db_name: process.env.DB_NAME,
       db_port: process.env.DB_PORT,
+      jwt_secret: process.env.JWT_SECRET,
+      jwt_expiration: process.env.JWT_EXPIRATION,
     };
 
     const { error, value } = configSchema.validate(cofig);
@@ -35,10 +37,18 @@ export class ConfigService {
   }
 
   static getDbString() {
-    const { db_user, db_pass, db_host, db_port, db_name } =
+    let { db_user, db_password, db_host, db_port, db_name } =
       ConfigService._config;
 
+    db_user = encodeURIComponent(db_user);
+    db_password = encodeURIComponent(db_password);
+    db_name = encodeURIComponent(db_name);
+
+    const query = new URLSearchParams({
+      sslmode: process.env.NODE_ENV === "production" ? "require" : "disable",
+    }).toString();
+
     // create a database connection string
-    return `postgresql://${db_user}:${db_pass}@${db_host}:${db_port}/${db_name}`;
+    return `postgres://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}?${query}`;
   }
 }

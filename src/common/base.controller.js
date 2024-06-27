@@ -25,7 +25,7 @@ export class BaseController {
     return res.status(405).json(ServerResponse.error(error));
   }
 
-  unathorized(res, error) {
+  unauthorized(res, error) {
     return res.status(401).json(ServerResponse.error(error));
   }
 
