@@ -39,4 +39,17 @@ export class UserRepository {
       ? new User(result.rows[0])
       : null;
   }
+
+  async updateUser(user) {
+    const { id, firstname, lastname, bio, avtar_url } = user;
+
+    const query = `UPDATE public.users SET 
+      first_name = COALESCE($2, first_name),
+      last_name = COALESCE($3, last_name),
+      bio = COALESCE($4, bio),
+      avatar_url = COALESCE($5, avatar_url)
+      WHERE id = $1`;
+
+    return this.db.query(query, [id, firstname, lastname, bio, avtar_url]);
+  }
 }
